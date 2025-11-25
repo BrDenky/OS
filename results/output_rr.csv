@@ -1,0 +1,8 @@
+pid,arrival_time,burst_time,completion_time,turnaround_time,waiting_time
+1,0,10,30,30,20
+2,1,5,10,9,4
+3,2,8,37,35,27
+4,3,3,18,15,12
+5,4,6,38,34,28
+6,5,2,25,20,18
+7,6,4,34,28,24
