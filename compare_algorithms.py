@@ -1,15 +1,12 @@
-#!/usr/bin/env python3
-"""
-Visual comparison of all scheduling algorithms.
-Shows side-by-side comparison of metrics for the same input.
-"""
+# Visual comparison of all scheduling algorithms.
+# Shows side-by-side comparison of metrics for the same input.
 
 import subprocess
 import csv
 import os
 
+# Function to run algorithm and extract average metrics
 def run_and_get_metrics(input_file, algorithm, quantum=None):
-    """Run algorithm and extract average metrics."""
     cmd = ['python', 'scheduler.py', input_file, algorithm]
     if quantum:
         cmd.append(f'q={quantum}')
@@ -47,6 +44,8 @@ def run_and_get_metrics(input_file, algorithm, quantum=None):
         'processes': len(rows)
     }
 
+
+# Main function to run the comparison
 def main():
     print("\n" + "="*100)
     print("CPU SCHEDULING ALGORITHMS - PERFORMANCE COMPARISON")

@@ -1,14 +1,10 @@
-#!/usr/bin/env python3
-"""
-Test script to verify all scheduling algorithms and compare results.
-"""
-
+# Test script to verify all scheduling algorithms and compare results.
 import subprocess
 import csv
 import os
 
+# Function to run a scheduling algorithm and return the output
 def run_algorithm(input_file, algorithm, quantum=None):
-    """Run a scheduling algorithm and return the output."""
     cmd = ['python', 'scheduler.py', input_file, algorithm]
     if quantum:
         cmd.append(f'q={quantum}')
@@ -16,8 +12,10 @@ def run_algorithm(input_file, algorithm, quantum=None):
     result = subprocess.run(cmd, capture_output=True, text=True)
     return result.stdout, result.returncode
 
+
+
+# Function to read and display CSV output
 def read_csv_output(filename):
-    """Read and display CSV output."""
     if not os.path.exists(filename):
         return None
     
@@ -26,17 +24,19 @@ def read_csv_output(filename):
         rows = list(reader)
     return rows
 
+
+# Main function to run the test
 def main():
     print("="*100)
     print("CPU SCHEDULING SIMULATOR - COMPREHENSIVE TEST")
     print("="*100)
     
     tests = [
-        ('sample_input.csv', 'FCFS', None, 'output_fcfs.csv'),
-        ('sample_input.csv', 'SJF', None, 'output_sjf.csv'),
-        ('sample_input.csv', 'SJF_P', None, 'output_sjf_preemptive.csv'),
-        ('sample_input_priority.csv', 'PS', None, 'output_priority.csv'),
-        ('sample_input.csv', 'RR', 2, 'output_rr.csv'),
+        ('inputs/sample_input.csv', 'FCFS', None, 'outputs/output_fcfs.csv'),
+        ('inputs/sample_input.csv', 'SJF', None, 'outputs/output_sjf.csv'),
+        ('inputs/sample_input.csv', 'SJF_P', None, 'outputs/output_sjf_preemptive.csv'),
+        ('inputs/sample_input_priority.csv', 'PS', None, 'outputs/output_priority.csv'),
+        ('inputs/sample_input.csv', 'RR', 2, 'outputs/output_rr.csv'),
     ]
     
     for input_file, algorithm, quantum, output_file in tests:

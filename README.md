@@ -54,22 +54,22 @@ python scheduler.py input_file.csv [FCFS|SJF|SJF_P|PS|RR] [q=time_quantum]
 
 ```bash
 # First Come First Serve
-python scheduler.py sample_input.csv FCFS
+python scheduler.py inputs/sample_input.csv FCFS
 
 # Shortest Job First (Non-Preemptive)
-python scheduler.py sample_input.csv SJF
+python scheduler.py inputs/sample_input.csv SJF
 
 # Shortest Job First (Preemptive)
-python scheduler.py sample_input.csv SJF_P
+python scheduler.py inputs/sample_input.csv SJF_P
 
 # Priority Scheduling
-python scheduler.py sample_input_priority.csv PS
+python scheduler.py inputs/sample_input_priority.csv PS
 
 # Round Robin con quantum de 2ms
-python scheduler.py sample_input.csv RR q=2
+python scheduler.py inputs/sample_input.csv RR q=2
 
 # Round Robin con quantum de 4ms
-python scheduler.py sample_input.csv RR q=4
+python scheduler.py inputs/sample_input.csv RR q=4
 ```
 
 ## Formato del Archivo CSV de Entrada
