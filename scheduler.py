@@ -8,36 +8,51 @@ from algorithms import (
     sjf_non_preemptive,
     sjf_preemptive,
     priority_scheduler,
-    round_robin_scheduler
+    round_robin_scheduler,
+    priority_preemptive
+
 )
 
-# Function to read processes from CSV file
 def read_processes_from_csv(filename: str) -> List[Process]:
     processes = []
     try:
-        with open(filename, 'r') as file:
-            reader = csv.DictReader(file)
+        with open(filename, 'r', encoding="utf-8") as file:
+            # Remove BOM and normalize
+            reader = csv.DictReader((line.replace('\ufeff','') for line in file))
+
             for row in reader:
-                pid = int(row['pid'])
-                arrival_time = int(row['arrival_time'])
-                burst_time = int(row['burst_time'])
-                priority = int(row.get('priority', 0))
-                
+                # Normalize column names and values
+                row = {k.strip(): v.strip() for k, v in row.items()}
+
+                # PID obligatorio
+                if "pid" not in row:
+                    raise KeyError("Column 'pid' not found in CSV (BOM or spaces detected).")
+
+                pid = int(row["pid"])
+
+                # arrival_time opcional
+                arrival_time = int(row.get("arrival_time", "0") or 0)
+
+                # burst_time obligatorio
+                if "burst_time" not in row:
+                    raise KeyError("Column 'burst_time' not found.")
+
+                burst_time = int(row["burst_time"])
+
+                # priority opcional
+                priority = int(row.get("priority", "0") or 0)
+
                 processes.append(Process(
                     pid=pid,
                     arrival_time=arrival_time,
                     burst_time=burst_time,
                     priority=priority
                 ))
+
         return processes
-    except FileNotFoundError:
-        print(f"Error: File '{filename}' not found.")
-        sys.exit(1)
-    except KeyError as e:
-        print(f"Error: Missing required column {e} in CSV file.")
-        sys.exit(1)
-    except ValueError as e:
-        print(f"Error: Invalid data in CSV file - {e}")
+
+    except Exception as e:
+        print("CSV read error:", e)
         sys.exit(1)
 
 
@@ -124,18 +139,7 @@ def print_results(processes: List[Process], algorithm: str, has_priority: bool =
 
 
 # Main Function to parse arguments and run the scheduler
-def main():
-    # if len(sys.argv) < 3:
-    #     print("Usage: python scheduler.py input_file.csv [FCFS|SJF|SJF_P|PS|RR] [q=time_quantum]")
-    #     print("\nAlgorithms:")
-    #     print("  FCFS   - First Come First Serve")
-    #     print("  SJF    - Shortest Job First (Non-Preemptive)")
-    #     print("  SJF_P  - Shortest Job First (Preemptive/SRTF)")
-    #     print("  PS     - Priority Scheduling")
-    #     print("  RR     - Round Robin (requires q=quantum parameter)")
-    #     print("\nExample: python scheduler.py input.csv RR q=2")
-    #     sys.exit(1)
-    
+def main():  
     input_file = sys.argv[1]
     algorithm = sys.argv[2].upper()
     
@@ -171,6 +175,11 @@ def main():
         algorithm_name = "Priority Scheduling"
         has_priority = True
         output_file = "output_priority.csv"
+    elif algorithm == "PS_P":
+        result_processes = priority_preemptive(processes)
+        algorithm_name = "Priority Scheduling (Preemptive)"
+        has_priority = True
+
     
     elif algorithm == "RR":
         # Parse quantum
@@ -193,7 +202,7 @@ def main():
     
     else:
         print(f"Error: Unknown algorithm '{algorithm}'")
-        print("Valid algorithms: FCFS, SJF, SJF_P, PS, RR")
+        print("Valid algorithms: FCFS, SJF, SJF_P, PS, RR, PS_P")
         sys.exit(1)
     
     # Display and save results

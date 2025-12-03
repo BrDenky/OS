@@ -9,6 +9,7 @@ from .sjf_non_preemptive import sjf_non_preemptive
 from .sjf_preemptive import sjf_preemptive
 from .priority import priority_scheduler
 from .round_robin import round_robin_scheduler
+from .priority_p import priority_preemptive
 
 __all__ = [
     'Process',

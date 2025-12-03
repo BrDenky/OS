@@ -9,10 +9,11 @@ def round_robin_scheduler(processes: List[Process], quantum: int) -> List[Proces
     n = len(processes)
     current_time = 0 # initial time CPU
     queue = [] # ready queue
-    completed_count = 0 # completed processes count
+    completed_count = 0
     arrived_indices = set() # indices of processes that have arrived
     
     # Sort by arrival time for initial processing
+    # enumerate make a list of tuples (index, process)
     sorted_processes = sorted(enumerate(processes), key=lambda x: (x[1].arrival_time, x[1].pid))
     
     while completed_count < n:
